@@ -1,0 +1,23 @@
+.parent-component {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fafafa;
+}
+
+.parent-component > * {
+    margin-bottom: 1rem;
+}
+
+.parent-component > *:last-child {
+    margin-bottom: 0;
+}
+
+.parent-component .section-header {
+    margin-top: 0;
+}
+
+.parent-component .section-header .section-title {
+    font-size: 1.1rem;
+}

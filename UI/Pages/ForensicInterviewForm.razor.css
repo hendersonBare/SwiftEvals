@@ -1,0 +1,85 @@
+.forensic-interview-form {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+}
+
+.form-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.header-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.header-row:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.checkbox-row > span {
+    font-weight: 500;
+    margin-top: 0.5rem;
+    min-width: 80px;
+}
+
+/* Nested sections styling */
+.forensic-interview-form .section-header .section-header {
+    margin-left: 1rem;
+    border-left: 2px solid #6c757d;
+    padding-left: 0.75rem;
+}
+
+.forensic-interview-form .section-header .section-header .section-title {
+    font-size: 1.1rem;
+    color: #495057;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .forensic-interview-form {
+        padding: 1rem;
+    }
+    
+    .header-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .checkbox-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Print styles */
+@media print {
+    .forensic-interview-form {
+        padding: 0;
+        font-size: 12pt;
+    }
+    
+    .form-header {
+        background-color: transparent;
+        border: 1px solid #000;
+    }
+    
+    .section-header {
+        page-break-inside: avoid;
+    }
+}

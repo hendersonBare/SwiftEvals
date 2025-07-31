@@ -1,0 +1,50 @@
+.free-response-component {
+    margin: 1rem 0;
+    padding: 0.5rem;
+}
+
+.response-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.response-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.response-input,
+.response-textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.response-input {
+    width: 100%;
+    max-width: 400px;
+}
+
+.response-textarea {
+    width: 100%;
+    max-width: 600px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.response-input:focus,
+.response-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.response-input:hover,
+.response-textarea:hover {
+    border-color: #999;
+}

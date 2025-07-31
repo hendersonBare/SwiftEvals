@@ -1,0 +1,69 @@
+.degree-of-component {
+    margin: 1rem 0;
+    padding: 0.5rem;
+}
+
+.rating-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.rating-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.rating-options {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.rating-option {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.rating-option:hover {
+    background-color: #f8f9fa;
+}
+
+.rating-option input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+    max-width: 300px;
+}
+
+.label-min,
+.label-max {
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    .rating-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .rating-labels {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
