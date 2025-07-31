@@ -1,5 +1,81 @@
-<h3>CheckBoxes</h3>
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="checkboxes-component">
+    <div class="checkbox-group">
+        @foreach (var option in Options)
+        {
+            <label class="checkbox-option">
+                <input type="checkbox" 
+                       checked="@GetOptionValue(option)" 
+                       @onchange="@(e => SetOptionValue(option, e.Value is bool boolValue && boolValue))" />
+                @option
+            </label>
+        }
+        @if (AllowOther)
+        {
+            <label class="checkbox-option">
+                <input type="checkbox" 
+                       checked="@HasOther" 
+                       @onchange="@OnOtherChanged" />
+                Other
+            </label>
+            @if (HasOther)
+            {
+                <input type="text" 
+                       value="@OtherText" 
+                       @oninput="@OnOtherTextChanged"
+                       class="other-input" 
+                       placeholder="Specify..." />
+            }
+        }
+    </div>
+</div>
 
 @code {
-    
+    [Parameter] public List<string> Options { get; set; } = new();
+    [Parameter] public Dictionary<string, bool> SelectedOptions { get; set; } = new();
+    [Parameter] public EventCallback<Dictionary<string, bool>> SelectedOptionsChanged { get; set; }
+    [Parameter] public bool AllowOther { get; set; } = false;
+    [Parameter] public string OtherText { get; set; } = "";
+    [Parameter] public EventCallback<string> OtherTextChanged { get; set; }
+
+    private bool HasOther { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        foreach (var option in Options)
+        {
+            if (!SelectedOptions.ContainsKey(option))
+            {
+                SelectedOptions[option] = false;
+            }
+        }
+    }
+
+    private bool GetOptionValue(string option)
+    {
+        return SelectedOptions.GetValueOrDefault(option, false);
+    }
+
+    private async Task SetOptionValue(string option, bool value)
+    {
+        SelectedOptions[option] = value;
+        await SelectedOptionsChanged.InvokeAsync(SelectedOptions);
+    }
+
+    private async Task OnOtherChanged(ChangeEventArgs e)
+    {
+        HasOther = e.Value is bool boolValue && boolValue;
+        if (!HasOther)
+        {
+            OtherText = "";
+            await OtherTextChanged.InvokeAsync(OtherText);
+        }
+    }
+
+    private async Task OnOtherTextChanged(ChangeEventArgs e)
+    {
+        OtherText = e.Value?.ToString() ?? "";
+        await OtherTextChanged.InvokeAsync(OtherText);
+    }
 }

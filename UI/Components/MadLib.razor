@@ -1,5 +1,93 @@
-<h3>MadLib</h3>
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="madlib-component">
+    @if (ParsedTemplate != null)
+    {
+        @foreach (var part in ParsedTemplate)
+        {
+            @if (part.IsGap)
+            {
+                <input type="text" 
+                       value="@GetResponseValue(part.GapIndex)" 
+                       @oninput="@(e => SetResponseValue(part.GapIndex, e.Value?.ToString() ?? ""))"
+                       class="madlib-input" 
+                       placeholder="@part.Placeholder" />
+            }
+            else
+            {
+                <span class="madlib-text">@part.Text</span>
+            }
+        }
+    }
+</div>
 
 @code {
-    
+    [Parameter] public string Template { get; set; } = "";
+    [Parameter] public Dictionary<int, string> Responses { get; set; } = new();
+    [Parameter] public EventCallback<Dictionary<int, string>> ResponsesChanged { get; set; }
+
+    private List<TemplatePart>? ParsedTemplate { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        ParseTemplate();
+    }
+
+    private void ParseTemplate()
+    {
+        if (string.IsNullOrEmpty(Template))
+        {
+            ParsedTemplate = new List<TemplatePart>();
+            return;
+        }
+
+        ParsedTemplate = new List<TemplatePart>();
+        var parts = Template.Split(new[] { "{{", "}}" }, StringSplitOptions.None);
+        var gapIndex = 0;
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (i % 2 == 0)
+            {
+                if (!string.IsNullOrEmpty(parts[i]))
+                {
+                    ParsedTemplate.Add(new TemplatePart { Text = parts[i], IsGap = false });
+                }
+            }
+            else
+            {
+                ParsedTemplate.Add(new TemplatePart 
+                { 
+                    IsGap = true, 
+                    GapIndex = gapIndex,
+                    Placeholder = parts[i]
+                });
+                
+                if (!Responses.ContainsKey(gapIndex))
+                {
+                    Responses[gapIndex] = "";
+                }
+                gapIndex++;
+            }
+        }
+    }
+
+    private string GetResponseValue(int index)
+    {
+        return Responses.GetValueOrDefault(index, "");
+    }
+
+    private async Task SetResponseValue(int index, string value)
+    {
+        Responses[index] = value;
+        await ResponsesChanged.InvokeAsync(Responses);
+    }
+
+    private class TemplatePart
+    {
+        public string Text { get; set; } = "";
+        public bool IsGap { get; set; }
+        public int GapIndex { get; set; }
+        public string Placeholder { get; set; } = "";
+    }
 }

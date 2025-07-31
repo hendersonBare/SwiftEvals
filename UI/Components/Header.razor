@@ -1,5 +1,16 @@
-<h3>Header</h3>
+<div class="section-header">
+    <h3 class="section-title">@Title</h3>
+    @if (!string.IsNullOrEmpty(Subtitle))
+    {
+        <p class="section-subtitle">@Subtitle</p>
+    }
+    <div class="section-content">
+        @ChildContent
+    </div>
+</div>
 
 @code {
-    
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Subtitle { get; set; } = "";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 }

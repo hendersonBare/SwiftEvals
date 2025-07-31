@@ -1,5 +1,38 @@
-<h3>FreeResponse</h3>
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="free-response-component">
+    <div class="response-field">
+        <label class="response-label">@Label</label>
+        @if (IsMultiline)
+        {
+            <textarea value="@Response" 
+                     @oninput="@OnResponseChanged"
+                     class="response-textarea" 
+                     placeholder="@Placeholder" 
+                     rows="@Rows"></textarea>
+        }
+        else
+        {
+            <input type="text" 
+                   value="@Response" 
+                   @oninput="@OnResponseChanged"
+                   class="response-input" 
+                   placeholder="@Placeholder" />
+        }
+    </div>
+</div>
 
 @code {
-    
+    [Parameter] public string Label { get; set; } = "";
+    [Parameter] public string Response { get; set; } = "";
+    [Parameter] public EventCallback<string> ResponseChanged { get; set; }
+    [Parameter] public string Placeholder { get; set; } = "";
+    [Parameter] public bool IsMultiline { get; set; } = false;
+    [Parameter] public int Rows { get; set; } = 3;
+
+    private async Task OnResponseChanged(ChangeEventArgs e)
+    {
+        Response = e.Value?.ToString() ?? "";
+        await ResponseChanged.InvokeAsync(Response);
+    }
 }

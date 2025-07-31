@@ -1,5 +1,39 @@
-<h3>DegreeOf</h3>
+@*This will hold entries in a semi-tabular form so that you can list many
+question with 'degree of' answers (ex: strongly agree, agree, nuetral, disagree, strongly disagree
+etc. would be the format of a 'degree of' component*@
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="degree-of-component">
+    <div class="rating-row">
+        <span class="rating-label">@Label</span>
+        <div class="rating-options">
+            <InputRadioGroup @bind-Value="Rating">
+                @for (int i = MinValue; i <= MaxValue; i++)
+                {
+                    var currentValue = i;
+                    <label class="rating-option">
+                        <InputRadio Value="@currentValue" />
+                        @currentValue
+                    </label>
+                }
+            </InputRadioGroup>
+        </div>
+        @if (ShowLabels && Labels != null && Labels.Count >= 2)
+        {
+            <div class="rating-labels">
+                <span class="label-min">@Labels[0]</span>
+                <span class="label-max">@Labels[1]</span>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
-    
+    [Parameter] public string Label { get; set; } = "";
+    [Parameter] public int Rating { get; set; }
+    [Parameter] public EventCallback<int> RatingChanged { get; set; }
+    [Parameter] public int MinValue { get; set; } = 1;
+    [Parameter] public int MaxValue { get; set; } = 5;
+    [Parameter] public List<string>? Labels { get; set; }
+    [Parameter] public bool ShowLabels { get; set; } = false;
 }

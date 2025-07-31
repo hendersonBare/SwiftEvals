@@ -1,3 +1,35 @@
-﻿<div class="my-component">
-    This component is defined in the <strong>UI</strong> library.
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<div class="yes-no-component">
+    <div class="question-row">
+        <span class="question-text">@QuestionText</span>
+        <div class="response-options">
+            <InputRadioGroup @bind-Value="Response">
+                <label class="radio-option">
+                    <InputRadio Value="@true" />
+                    Y
+                </label>
+                <label class="radio-option">
+                    <InputRadio Value="@false" />
+                    N
+                </label>
+            </InputRadioGroup>
+        </div>
+        @if (!string.IsNullOrEmpty(FollowUpText))
+        {
+            <span class="followup-text">@FollowUpText</span>
+            <input type="text" 
+                   @bind="FollowUpResponse" 
+                   class="followup-input" />
+        }
+    </div>
 </div>
+
+@code {
+    [Parameter] public string QuestionText { get; set; } = "";
+    [Parameter] public bool? Response { get; set; }
+    [Parameter] public EventCallback<bool?> ResponseChanged { get; set; }
+    [Parameter] public string FollowUpText { get; set; } = "";
+    [Parameter] public string FollowUpResponse { get; set; } = "";
+    [Parameter] public EventCallback<string> FollowUpResponseChanged { get; set; }
+}

@@ -1,5 +1,140 @@
-<h3>ForensicInterviewForm</h3>
+@using Microsoft.AspNetCore.Components.Forms
+@using UI.Components
+
+<div class="forensic-interview-form">
+    <div class="form-header">
+        <div class="header-row">
+            <FreeResponse Label="Defendant:" @bind-Response="DefendantName" />
+            <FreeResponse Label="Date of evaluation:" @bind-Response="EvaluationDate" />
+        </div>
+        <div class="header-row">
+            <FreeResponse Label="Date of Birth:" @bind-Response="DateOfBirth" />
+            <FreeResponse Label="Time eval began:" @bind-Response="TimeEvalBegan" />
+        </div>
+        <div class="header-row">
+            <FreeResponse Label="Location:" @bind-Response="Location" />
+            <FreeResponse Label="Time eval ended:" @bind-Response="TimeEvalEnded" />
+        </div>
+    </div>
+
+    <Header Title="Family/Medical History">
+        <MadLib Template="If in jail, how long? {{duration}} Where living before arrest and with whom? {{living situation}}" 
+               @bind-Responses="JailLivingResponses" />
+        
+        <MadLib Template="If on bond, current living arrangements {{bond living}}" 
+               @bind-Responses="BondLivingResponses" />
+        
+        <YesNo QuestionText="Ever married?" @bind-Response="EverMarried" />
+        
+        <MadLib Template="Any children? If so, number and ages {{children details}}" 
+               @bind-Responses="ChildrenResponses" />
+        
+        <YesNo QuestionText="History of developmental delays?" @bind-Response="DevDelays" />
+        <YesNo QuestionText="Any medical conditions?" @bind-Response="MedicalConditions" />
+        
+        <div class="checkbox-row">
+            <span>History of:</span>
+            <CheckBoxes Options="@MedicalHistoryOptions" @bind-SelectedOptions="MedicalHistory" />
+        </div>
+        
+        <FreeResponse Label="Notes:" @bind-Response="FamilyMedicalNotes" IsMultiline="true" />
+    </Header>
+
+    <Header Title="Educational History">
+        <FreeResponse Label="Highest grade completed" @bind-Response="HighestGrade" />
+        <YesNo QuestionText="Special education?" @bind-Response="SpecialEducation" />
+        <YesNo QuestionText="School behavior problems?" @bind-Response="SchoolBehaviorProblems" />
+        <FreeResponse Label="Notes:" @bind-Response="EducationNotes" IsMultiline="true" />
+    </Header>
+
+    <Header Title="Employment History/Military Service">
+        <YesNo QuestionText="Ever served in military?" @bind-Response="MilitaryService" />
+        <YesNo QuestionText="Ever received disability?" @bind-Response="DisabilityReceived" />
+        <YesNo QuestionText="Currently working/employed before arrest?" @bind-Response="CurrentlyEmployed" />
+        <FreeResponse Label="Notes:" @bind-Response="EmploymentNotes" IsMultiline="true" />
+    </Header>
+
+    <Header Title="Mental Status Exam">
+        <Header Title="OBSERVATIONS">
+            <CheckBoxes Options="@AppearanceOptions" @bind-SelectedOptions="AppearanceObservations" AllowOther="true" @bind-OtherText="AppearanceOther" />
+            <CheckBoxes Options="@SpeechOptions" @bind-SelectedOptions="SpeechObservations" AllowOther="true" @bind-OtherText="SpeechOther" />
+            <CheckBoxes Options="@EyeContactOptions" @bind-SelectedOptions="EyeContactObservations" AllowOther="true" @bind-OtherText="EyeContactOther" />
+            <FreeResponse Label="Comments:" @bind-Response="ObservationComments" IsMultiline="true" />
+        </Header>
+
+        <Header Title="COGNITION">
+            <CheckBoxes Options="@OrientationOptions" @bind-SelectedOptions="OrientationImpairment" />
+            <CheckBoxes Options="@MemoryOptions" @bind-SelectedOptions="MemoryImpairment" />
+            <CheckBoxes Options="@AttentionOptions" @bind-SelectedOptions="AttentionImpairment" />
+            <FreeResponse Label="Comments:" @bind-Response="CognitionComments" IsMultiline="true" />
+        </Header>
+    </Header>
+
+    <Header Title="Competency Assessment">
+        <DegreeOf Label="Understanding of charges" @bind-Rating="UnderstandingChargesRating" MinValue="1" MaxValue="5" 
+                  Labels="@CompetencyLabels" ShowLabels="true" />
+        <DegreeOf Label="Appreciation of penalties" @bind-Rating="AppreciationPenaltiesRating" MinValue="1" MaxValue="5" 
+                  Labels="@CompetencyLabels" ShowLabels="true" />
+        <DegreeOf Label="Appraisal of available defenses" @bind-Rating="AppraisalDefensesRating" MinValue="1" MaxValue="5" 
+                  Labels="@CompetencyLabels" ShowLabels="true" />
+    </Header>
+</div>
 
 @code {
-    
+    private string DefendantName = "";
+    private string EvaluationDate = "";
+    private string DateOfBirth = "";
+    private string TimeEvalBegan = "";
+    private string Location = "";
+    private string TimeEvalEnded = "";
+
+    private Dictionary<int, string> JailLivingResponses = new();
+    private Dictionary<int, string> BondLivingResponses = new();
+    private Dictionary<int, string> ChildrenResponses = new();
+
+    private bool? EverMarried;
+    private bool? DevDelays;
+    private bool? MedicalConditions;
+    private bool? SpecialEducation;
+    private bool? SchoolBehaviorProblems;
+    private bool? MilitaryService;
+    private bool? DisabilityReceived;
+    private bool? CurrentlyEmployed;
+
+    private List<string> MedicalHistoryOptions = new() { "blackout", "LOC", "seizure", "brain injury" };
+    private Dictionary<string, bool> MedicalHistory = new();
+
+    private List<string> AppearanceOptions = new() { "Neat", "Disheveled", "Inappropriate", "Bizarre" };
+    private Dictionary<string, bool> AppearanceObservations = new();
+    private string AppearanceOther = "";
+
+    private List<string> SpeechOptions = new() { "Normal", "Tangential", "Pressured", "Impoverished" };
+    private Dictionary<string, bool> SpeechObservations = new();
+    private string SpeechOther = "";
+
+    private List<string> EyeContactOptions = new() { "Normal", "Intense", "Avoidant" };
+    private Dictionary<string, bool> EyeContactObservations = new();
+    private string EyeContactOther = "";
+
+    private List<string> OrientationOptions = new() { "None", "Place", "Object", "Person", "Time" };
+    private Dictionary<string, bool> OrientationImpairment = new();
+
+    private List<string> MemoryOptions = new() { "None", "Short-Term", "Long-Term" };
+    private Dictionary<string, bool> MemoryImpairment = new();
+
+    private List<string> AttentionOptions = new() { "Normal", "Distracted" };
+    private Dictionary<string, bool> AttentionImpairment = new();
+
+    private int UnderstandingChargesRating = 1;
+    private int AppreciationPenaltiesRating = 1;
+    private int AppraisalDefensesRating = 1;
+
+    private List<string> CompetencyLabels = new() { "Incompetent", "Competent" };
+
+    private string FamilyMedicalNotes = "";
+    private string EducationNotes = "";
+    private string EmploymentNotes = "";
+    private string HighestGrade = "";
+    private string ObservationComments = "";
+    private string CognitionComments = "";
 }
